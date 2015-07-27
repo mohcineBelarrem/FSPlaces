@@ -31,7 +31,7 @@ class VenueDetailVC: UITableViewController {
         self.currentVenueArray.append("\(self.currentVenue.distance)m")
         self.currentVenueArray.append(self.currentVenue.address)
         
-        println(self.currentVenue.address)
+        //println(self.currentVenue.address)
         
     }
     

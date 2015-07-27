@@ -73,9 +73,17 @@ class Retriever : NSObject , CLLocationManagerDelegate  {
                     
                     self.book.venuesList.append(venueObject)
                     
-                    
-                    //TODO: sort the results near to  far
                 }
+                
+                //sorting the venues from the nearset to the furthest
+                
+                self.book.venuesList = self.book.venuesList.sorted({ (venueA : Venue, venueB : Venue) -> Bool in
+                   
+                    return venueA.distance <= venueB.distance
+                
+                })
+                
+                
             }
             
         } else {
