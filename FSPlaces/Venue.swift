@@ -16,27 +16,39 @@ struct Position {
    
      init(location : NSDictionary) {
         
-        self.lat = (location["lat"] as! NSString).doubleValue
-        self.lng = (location["lng"] as! NSString).doubleValue
+        self.lat = (location["lat"] as! NSNumber).doubleValue
+        self.lng = (location["lng"] as! NSNumber).doubleValue
         
     }
     
-    init(lat : Double, lng : Double) {
+    init(lat : Double = 0.0, lng : Double = 0.0) {
         
         self.lat = lat
         self.lng = lng
     }
     
+    func description() -> String {
+        
+        return "\(self.lat),\(self.lng)"
+    }
 }
 
 
 class Venue {
     
     
-    var name      : String
-    var distance  : Int
+    var name      : String 
+    var distance  : Int32
     var position  : Position
     var address   : NSArray
+    
+    init() {
+        
+        self.name = ""
+        self.distance = 0
+        self.position = Position()
+        self.address = NSArray()
+    }
     
     init(venueDic : NSDictionary) {
         
@@ -44,7 +56,7 @@ class Venue {
         
         let venuDicLocation = venueDic["location"] as! NSDictionary
         
-        self.distance = (venuDicLocation["distance"] as! String).toInt()!
+        self.distance = (venuDicLocation["distance"] as! NSNumber).intValue
         
         self.position = Position(location : venuDicLocation)
         

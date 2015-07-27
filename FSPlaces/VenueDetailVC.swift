@@ -9,7 +9,11 @@
 import UIKit
 
 class VenueDetailVC: UITableViewController {
-
+    
+    //Instance vars
+    var currentVenue : Venue!
+    
+    //mtehods
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -18,6 +22,8 @@ class VenueDetailVC: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
+        self.title = self.currentVenue.name
     }
 
     override func didReceiveMemoryWarning() {

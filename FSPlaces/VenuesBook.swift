@@ -10,12 +10,14 @@ import UIKit
 
 class VenuesBook {
  
-    var venuesList : [Venue]!
+    var venuesList : [Venue]
     var myPosition : Position!
     
-    init(lat : Double, lng : Double) {
+    init() {
         
-        self.myPosition = Position(lat: lat, lng: lng)
+        self.myPosition = Position()
+        
+        self.venuesList = [Venue]()
     }
     
 }

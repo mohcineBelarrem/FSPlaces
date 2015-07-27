@@ -25,17 +25,18 @@ class SerachVC: UIViewController,UISearchBarDelegate,UITableViewDataSource,UITab
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        self.retriever = Retriever()
+        
         self.title! = "Places"
         
         self.searchBar = UISearchBar(frame: CGRectMake(0, 0, 0.9*self.view.frame.size.width, 50))
         
         self.searchBar.delegate = self
         
-        self.searchBar.placeholder = "Search for places nearby Sushi,Pizza"
+        self.searchBar.placeholder = "Search for places Sushi,Pizza..."
         
         self.tableView.tableHeaderView = searchBar
         
-       self.retriever = Retriever()
         
     }
     
@@ -64,17 +65,29 @@ class SerachVC: UIViewController,UISearchBarDelegate,UITableViewDataSource,UITab
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        println("here we go")
-        
+        if segue.identifier == "detailSegue" {
+            
+            let venueDetailVC = segue.destinationViewController as! VenueDetailVC
+            
+            if let indexPath = self.tableView.indexPathForSelectedRow() {
+                
+                let currentVenue = self.retriever.book.venuesList[indexPath.row]
+                
+                venueDetailVC.currentVenue = currentVenue
+                
+            }
+        }
     }
     
     //Search Bar delegate protocols
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         
-        println("Retriever fetch")
+        self.retriever.fetchData(self.searchBar.text)
         
         self.searchBar.resignFirstResponder()
+        
+        self.tableView.reloadData()
     }
     
     //tableView Delegate Protocols
@@ -88,7 +101,7 @@ class SerachVC: UIViewController,UISearchBarDelegate,UITableViewDataSource,UITab
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
-        return 50.0
+        return 70.0
     }
     
     
@@ -98,16 +111,53 @@ class SerachVC: UIViewController,UISearchBarDelegate,UITableViewDataSource,UITab
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return 1
+        let rowsNumber = self.retriever.book.venuesList.count
+        
+        if rowsNumber == 0 {
+            
+            self.tableView.allowsSelection = false
+            
+            return 1
+            
+        } else {
+            
+            self.tableView.allowsSelection = true
+            
+            return rowsNumber
+        }
+        
         
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("searchResultCell", forIndexPath: indexPath) as! UITableViewCell
+        var cell : UITableViewCell
         
-        cell.textLabel?.text = "Hello"
-        cell.detailTextLabel?.text = "World"
+        if self.retriever.book.venuesList.count > 0 {
+            
+            let venue = self.retriever.book.venuesList[indexPath.row]
+            
+            cell = tableView.dequeueReusableCellWithIdentifier("searchResultCell", forIndexPath: indexPath) as! UITableViewCell
+            
+            cell.textLabel?.text = venue.name
+            cell.detailTextLabel?.text = "Distance : \(venue.distance)m"
+            
+            
+        } else {
+            
+            cell = tableView.dequeueReusableCellWithIdentifier("noResultCell", forIndexPath: indexPath) as! UITableViewCell
+            
+            if self.searchBar.text != "" {
+                
+                cell.textLabel?.text = "No results for \"\(self.searchBar.text)\" try a different keyword please."
+                cell.textLabel?.numberOfLines = 0
+                
+            } else {
+                
+                cell.textLabel?.text=""
+            }
+            
+        }
         
         return cell
     }
