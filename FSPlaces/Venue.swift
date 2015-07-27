@@ -40,14 +40,14 @@ class Venue {
     var name      : String 
     var distance  : Int32
     var position  : Position
-    var address   : NSArray
+    var address   : String
     
     init() {
         
         self.name = ""
         self.distance = 0
         self.position = Position()
-        self.address = NSArray()
+        self.address = ""
         
         //TODO:add code to print distance m or km
     }
@@ -62,14 +62,21 @@ class Venue {
         
         self.position = Position(location : venuDicLocation)
         
-        self.address = venuDicLocation["formattedAddress"] as! NSArray
+        self.address = ""
+        
+        let addressArray = venuDicLocation["formattedAddress"] as! NSArray
+        
+        for addressChunk in addressArray {
+            
+            self.address += (addressChunk as! String) + "\r\n"
+        }
         
     }
     
     
      func description () -> String {
         
-        return self.name + " \(self.distance) \(self.position.lat) \(self.position.lng) \(self.address)"
+        return self.name + " \(self.distance) \(self.position.lat) \(self.position.lng) \r\n\(self.address)"
     }
 
 }
