@@ -48,6 +48,8 @@ class Venue {
         self.distance = 0
         self.position = Position()
         self.address = NSArray()
+        
+        //TODO:add code to print distance m or km
     }
     
     init(venueDic : NSDictionary) {

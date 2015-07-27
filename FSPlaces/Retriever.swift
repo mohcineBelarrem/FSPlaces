@@ -36,13 +36,14 @@ class Retriever : NSObject , CLLocationManagerDelegate  {
     
     func fetchData(query : String) {
         
-        //TODO: process query for example if user typed 'café'
+        //TODO: process query against html
+        var queryProcessed = query.stringByFoldingWithOptions(.DiacriticInsensitiveSearch, locale: NSLocale.currentLocale())
         
         self.book.venuesList.removeAll(keepCapacity: false)
         
         let positionString = self.book.myPosition.description()
         
-        let stringURL = "https://api.foursquare.com/v2/venues/search?client_id=\(myClientID)&client_secret=\(myClientSecret)&v=20130815&ll=\(positionString)&query=\(query)"
+        let stringURL = "https://api.foursquare.com/v2/venues/search?client_id=\(myClientID)&client_secret=\(myClientSecret)&v=20130815&ll=\(positionString)&query=\(queryProcessed)"
         
         var url = NSURL(string: stringURL)
         
@@ -72,6 +73,8 @@ class Retriever : NSObject , CLLocationManagerDelegate  {
                     
                     self.book.venuesList.append(venueObject)
                     
+                    
+                    //TODO: sort the results near to  far
                 }
             }
             
