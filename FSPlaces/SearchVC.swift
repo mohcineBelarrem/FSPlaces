@@ -13,6 +13,7 @@ class SerachVC: UIViewController,UISearchBarDelegate,UITableViewDataSource,UITab
     //Instance vars
     var searchBar : UISearchBar!
     
+    var retriever : Retriever!
     
     //Outlets
     @IBOutlet var tableView: UITableView!
@@ -34,7 +35,7 @@ class SerachVC: UIViewController,UISearchBarDelegate,UITableViewDataSource,UITab
         
         self.tableView.tableHeaderView = searchBar
         
-       // self.tableView.hidden = true
+       self.retriever = Retriever()
         
     }
     
@@ -70,6 +71,9 @@ class SerachVC: UIViewController,UISearchBarDelegate,UITableViewDataSource,UITab
     //Search Bar delegate protocols
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        
+        println("Retriever fetch")
+        
         self.searchBar.resignFirstResponder()
     }
     
