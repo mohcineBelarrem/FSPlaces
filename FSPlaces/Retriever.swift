@@ -25,7 +25,8 @@ class Retriever : NSObject , CLLocationManagerDelegate  {
         super.init()
         
         self.locationManager.delegate = self
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        self.locationManager.distanceFilter = kCLDistanceFilterNone
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.startUpdatingLocation()
         
@@ -36,6 +37,10 @@ class Retriever : NSObject , CLLocationManagerDelegate  {
     
     func fetchData(query : String) {
         
+        
+        self.locationManager.startUpdatingLocation()
+        
+        
         //TODO: process query against html
         var queryProcessed = query.stringByFoldingWithOptions(.DiacriticInsensitiveSearch, locale: NSLocale.currentLocale())
         
@@ -44,6 +49,8 @@ class Retriever : NSObject , CLLocationManagerDelegate  {
         let positionString = self.book.myPosition.description()
         
         let stringURL = "https://api.foursquare.com/v2/venues/search?client_id=\(myClientID)&client_secret=\(myClientSecret)&v=20130815&ll=\(positionString)&query=\(queryProcessed)"
+        
+        println(stringURL)
         
         var url = NSURL(string: stringURL)
         
@@ -113,12 +120,13 @@ class Retriever : NSObject , CLLocationManagerDelegate  {
         
         if lat != 0.0 && lng != 0.0 {
             
-            self.book = VenuesBook()
             self.book.myPosition = Position(lat: lat, lng: lng)
-            self.locationManager.stopUpdatingLocation()
             
-           // println("\(self.book.myPosition.lat),\(self.book.myPosition.lng)")
         }
+        
+        println("\(self.book.myPosition.lat),\(self.book.myPosition.lng)")
+        
+        self.locationManager.stopUpdatingLocation()
         
     }
     
